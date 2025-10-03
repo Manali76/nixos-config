@@ -15,8 +15,6 @@
 
         # Durcissement & maintenance (ajout non intrusif)
         ({ lib, pkgs, ... }: {
-          # Harmonise le nom d’hôte avec l’attribut de flake
-          networking.hostName = lib.mkForce "manali";
 
           # Paquets de base (concaténés à vos paquets existants)
           environment.systemPackages = with pkgs; [
@@ -40,9 +38,6 @@
             # Ouvre automatiquement le port si le pare-feu est actif
             openFirewall = true;
           };
-
-          # Désactive l’auto-login GDM (plus sûr)
-          services.displayManager.autoLogin.enable = lib.mkForce false;
 
           # Nix : GC & optimisation
           nix = {

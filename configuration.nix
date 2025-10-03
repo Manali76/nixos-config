@@ -16,7 +16,7 @@
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "manali"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -91,14 +91,6 @@
     #  thunderbird
     ];
   };
-
-  # Enable automatic login for the user.
-  services.displayManager.autoLogin.enable = true;
-  services.displayManager.autoLogin.user = "manali";
-
-  # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
-  systemd.services."getty@tty1".enable = false;
-  systemd.services."autovt@tty1".enable = false;
 
   # Install firefox.
   programs.firefox.enable = true;
