@@ -89,6 +89,9 @@
     isNormalUser = true;
     description = "manali";
     extraGroups = [ "networkmanager" "wheel" ];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILfwhRhxYE8iROApWtkXpNIFZU1Q9YLzHlqCLyex5HpZ"
+    ];
     packages = with pkgs; [
     #  thunderbird
     ];
