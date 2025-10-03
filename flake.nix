@@ -10,14 +10,52 @@
     nixosConfigurations.manali = nixpkgs.lib.nixosSystem {
       inherit system;
       modules = [
-        ./hardware-configuration.nix
+        # configuration.nix importe déjà hardware-configuration.nix
         ./configuration.nix
-        {
-          nix.settings.experimental-features = [ "nix-command" "flakes" ];
-          nixpkgs.config.allowUnfree = true;
-          system.stateVersion = "25.05";
-        }
+
+        # Durcissement & maintenance (ajout non intrusif)
+        ({ lib, pkgs, ... }: {
+          # Harmonise le nom d’hôte avec l’attribut de flake
+          networking.hostName = lib.mkForce "manali";
+
+          # Paquets de base (concaténés à vos paquets existants)
+          environment.systemPackages = with pkgs; [
+            vim wget curl htop
+          ];
+
+          # Trim périodique (SSD)
+          services.fstrim.enable = true;
+
+          # Swap mémoire rapide
+          zramSwap.enable = true;
+
+          # SSH durci
+          services.openssh = {
+            enable = true;
+            settings = {
+              PasswordAuthentication = false;
+              KbdInteractiveAuthentication = false;
+              PermitRootLogin = "no";
+            };
+            # Ouvre automatiquement le port si le pare-feu est actif
+            openFirewall = true;
+          };
+
+          # Désactive l’auto-login GDM (plus sûr)
+          services.displayManager.autoLogin.enable = lib.mkForce false;
+
+          # Nix : GC & optimisation
+          nix = {
+            gc = {
+              automatic = true;
+              dates = "weekly";
+              options = "--delete-older-than 14d";
+            };
+            optimise.automatic = true;
+          };
+        })
       ];
     };
   };
 }
+
