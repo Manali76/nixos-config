@@ -25,7 +25,9 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-
+  networking.networkmanager.settings = {
+    main = { "hostname-mode" = "none"; };
+  };
   # Set your time zone.
   time.timeZone = "Europe/Paris";
 
